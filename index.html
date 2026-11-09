@@ -40,9 +40,9 @@ ul { padding-left: 20px; }
 <body>
 <main>
 <h1>DriftPilot — driftpilot-demo/infra</h1>
-<p class="sub">2026-10-24 → 2026-11-09 · generated 2026-11-09 06:43 UTC</p>
+<p class="sub">2026-10-24 → 2026-11-09 · generated 2026-11-09 22:26 UTC</p>
 
-<div class="tiles"><div class="tile"><div class="value">58</div><div class="label">Runs</div><div class="hint"></div></div><div class="tile"><div class="value">6</div><div class="label">Drift episodes</div><div class="hint">distinct times something drifted</div></div><div class="tile"><div class="value">20.7%</div><div class="label">Runs with zero drift</div><div class="hint"></div></div><div class="tile"><div class="value">1.8 h</div><div class="label">Mean time to fix</div><div class="hint"></div></div><div class="tile"><div class="value">33.3%</div><div class="label">Resources ever drifted</div><div class="hint"></div></div><div class="tile"><div class="value">1</div><div class="label">Monitor alerts</div><div class="hint">is DriftPilot itself drifting?</div></div></div>
+<div class="tiles"><div class="tile"><div class="value">59</div><div class="label">Runs</div><div class="hint"></div></div><div class="tile"><div class="value">6</div><div class="label">Drift episodes</div><div class="hint">distinct times something drifted</div></div><div class="tile"><div class="value">20.3%</div><div class="label">Runs with zero drift</div><div class="hint"></div></div><div class="tile"><div class="value">1.8 h</div><div class="label">Mean time to fix</div><div class="hint"></div></div><div class="tile"><div class="value">33.3%</div><div class="label">Resources ever drifted</div><div class="hint"></div></div><div class="tile"><div class="value">0</div><div class="label">Monitor alerts</div><div class="hint">is DriftPilot itself drifting?</div></div></div>
 
 <h2>New drift per day</h2>
 <p class="hint">Bars: new drift episodes. Red dots: unusual days (z-score &gt; 3).
@@ -55,7 +55,7 @@ Dashed lines: change-points, where the level of drift shifted.</p>
 </div>
 
 <h2>Verdict monitor</h2>
-<ul><li>The mix of verdict action values shifted (PSI 4.60 &gt; 0.25) compared with the previous 56 days.</li></ul>
+<ul><li>None.</li></ul>
 
 <div class="grid2">
   <div><h2>Recurring drift (3+ times in 14 days)</h2>
@@ -70,7 +70,7 @@ Dashed lines: change-points, where the level of drift shifted.</p>
 
 <h2>Is the kind of drift changing? (last 14 days vs previous 56)</h2>
 <div class="scroll"><table>
-  <tr><th>Dimension</th><th>PSI</th><th>χ² p-value</th><th>Shifted</th></tr><tr><td>category</td><td>0.275</td><td>1.0</td><td>yes</td></tr><tr><td>severity</td><td>0.0</td><td>1.0</td><td>no</td></tr>
+  <tr><th>Dimension</th><th>PSI</th><th>χ² p-value</th><th>Shifted</th></tr><tr><td colspan="4">Not enough data.</td></tr>
 </table></div>
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
