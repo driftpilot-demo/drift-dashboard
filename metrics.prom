@@ -1,0 +1,33 @@
+# HELP driftpilot_open_episodes Drift episodes still open at the latest scan.
+# TYPE driftpilot_open_episodes gauge
+# HELP driftpilot_episodes_total Drift episodes seen in the recorded history.
+# TYPE driftpilot_episodes_total counter
+driftpilot_episodes_total{severity="critical",team="data",drift_type="database",repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector"} 2
+driftpilot_episodes_total{severity="critical",team="platform",drift_type="infrastructure",repo="driftpilot-demo/infra"} 3
+driftpilot_episodes_total{severity="critical",team="platform",drift_type="infrastructure",repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector"} 3
+driftpilot_episodes_total{severity="high",team="data",drift_type="database",repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector"} 1
+driftpilot_episodes_total{severity="low",team="platform",drift_type="infrastructure",repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector"} 1
+driftpilot_episodes_total{severity="medium",team="platform",drift_type="infrastructure",repo="driftpilot-demo/infra"} 3
+# HELP driftpilot_iac_coverage_ratio Managed resources / all resources (0 to 1).
+# TYPE driftpilot_iac_coverage_ratio gauge
+driftpilot_iac_coverage_ratio 1
+# HELP driftpilot_drift_rate_ratio Distinct drifted resources / managed resources.
+# TYPE driftpilot_drift_rate_ratio gauge
+driftpilot_drift_rate_ratio 0.429
+# HELP driftpilot_mean_time_to_resolve_hours Mean hours from first seen to the first scan without the drift.
+# TYPE driftpilot_mean_time_to_resolve_hours gauge
+driftpilot_mean_time_to_resolve_hours 106.2
+# HELP driftpilot_overrule_ratio Share of decided findings a person overruled (0 to 1).
+# TYPE driftpilot_overrule_ratio gauge
+driftpilot_overrule_ratio 0
+# HELP driftpilot_scan_last_timestamp_seconds Unix time of the latest recorded scan.
+# TYPE driftpilot_scan_last_timestamp_seconds gauge
+driftpilot_scan_last_timestamp_seconds{repo="driftpilot-demo/infra",drift_type="infrastructure"} 1795611591
+driftpilot_scan_last_timestamp_seconds{repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector",drift_type="database"} 1795605422
+driftpilot_scan_last_timestamp_seconds{repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector",drift_type="infrastructure"} 1795602128
+# HELP driftpilot_scan_errors_7d Errors reported by scans in the 7 days before the latest scan.
+# TYPE driftpilot_scan_errors_7d gauge
+driftpilot_scan_errors_7d 0
+# HELP driftpilot_monitor_alerts Active alerts from the verdict monitor (is DriftPilot's judgment drifting?).
+# TYPE driftpilot_monitor_alerts gauge
+driftpilot_monitor_alerts 0
