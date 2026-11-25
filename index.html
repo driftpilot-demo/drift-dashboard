@@ -1,137 +1,17 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DriftPilot — driftpilot-demo/infra</title>
-<style>
-:root {
-  --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --card: #f6f8fa; --line: #d1d9e0;
-  --c-critical: #cf222e; --c-high: #e16f24; --c-medium: #bf8700; --c-low: #1a7f37; --c-main: #0969da;
-}
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --card: #151b23; --line: #3d444d;
-          --c-main: #4493f8; }
-}
-* { box-sizing: border-box; }
-body { margin: 0; padding: 24px 16px; background: var(--bg); color: var(--fg);
-       font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-main { max-width: 1100px; margin: 0 auto; }
-h1 { margin: 0 0 4px; font-size: 24px; }
-h2 { font-size: 17px; margin: 32px 0 8px; }
-.sub, .hint, .label { color: var(--muted); }
-.sub { margin: 0 0 16px; }
-.note { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-.tile { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
-.value { font-size: 22px; font-weight: 600; }
-.label { font-size: 13px; }
-.hint { font-size: 12px; }
-.chart { position: relative; height: 280px; background: var(--card); border: 1px solid var(--line);
-         border-radius: 8px; padding: 8px; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
-.scroll { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
-code { font-size: 13px; }
-ul { padding-left: 20px; }
-</style>
-</head>
-<body>
-<main>
-<h1>DriftPilot — driftpilot-demo/infra</h1>
-<p class="sub">2026-10-24 → 2026-11-25 · generated 2026-11-25 08:43 UTC</p>
-
-<div class="tiles"><div class="tile"><div class="value">93</div><div class="label">Runs</div><div class="hint"></div></div><div class="tile"><div class="value">6</div><div class="label">Drift episodes</div><div class="hint">distinct times something drifted</div></div><div class="tile"><div class="value">19.4%</div><div class="label">Runs with zero drift</div><div class="hint"></div></div><div class="tile"><div class="value">224.9 h</div><div class="label">Mean time to fix</div><div class="hint"></div></div><div class="tile"><div class="value">33.3%</div><div class="label">Resources ever drifted</div><div class="hint"></div></div><div class="tile"><div class="value">0</div><div class="label">Monitor alerts</div><div class="hint">is DriftPilot itself drifting?</div></div></div>
-
-<h2>New drift per day</h2>
-<p class="hint">Bars: new drift episodes. Red dots: unusual days (z-score &gt; 3).
-Dashed lines: change-points, where the level of drift shifted.</p>
-<div class="chart"><canvas id="daily"></canvas></div>
-
-<div class="grid2">
-  <div><h2>Severity mix per week</h2><div class="chart"><canvas id="severity"></canvas></div></div>
-  <div><h2>Human overrule rate per week</h2><div class="chart"><canvas id="overrule"></canvas></div></div>
-</div>
-
-<h2>Verdict monitor</h2>
-<ul><li>None.</li></ul>
-
-<div class="grid2">
-  <div><h2>Recurring drift (3+ times in 14 days)</h2>
-    <div class="scroll"><table>
-      <tr><th>Resource</th><th>Setting</th><th>Episodes</th></tr><tr><td colspan="3">None.</td></tr>
-    </table></div></div>
-  <div><h2>Unusual days</h2>
-    <div class="scroll"><table>
-      <tr><th>Day</th><th>New</th><th>Usual</th><th>z</th></tr><tr><td colspan="4">None.</td></tr>
-    </table></div></div>
-</div>
-
-<h2>Is the kind of drift changing? (last 14 days vs previous 56)</h2>
-<div class="scroll"><table>
-  <tr><th>Dimension</th><th>PSI</th><th>χ² p-value</th><th>Shifted</th></tr><tr><td colspan="4">Not enough data.</td></tr>
-</table></div>
-</main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script>
-const D = {"days": ["2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25"], "daily": [0, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "anomalies": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "changePoints": [], "severity": {"weeks": ["2026-10-19", "2026-10-26"], "series": {"critical": [1, 2], "high": [0, 0], "medium": [1, 2], "low": [0, 0]}}, "overrule": {"weeks": [], "rates": [], "threshold": 25}};
-const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-Chart.defaults.color = css("--muted");
-Chart.defaults.borderColor = css("--line");
-Chart.defaults.maintainAspectRatio = false;
-
-const changePointLines = {
-  id: "changePoints",
-  afterDatasetsDraw(chart) {
-    const x = chart.scales.x, y = chart.scales.y, ctx = chart.ctx;
-    ctx.save();
-    ctx.strokeStyle = css("--c-critical");
-    ctx.setLineDash([4, 4]);
-    for (const day of D.changePoints) {
-      const px = x.getPixelForValue(D.days.indexOf(day));
-      ctx.beginPath(); ctx.moveTo(px, y.top); ctx.lineTo(px, y.bottom); ctx.stroke();
-    }
-    ctx.restore();
-  },
-};
-
-new Chart(document.getElementById("daily"), {
-  data: {
-    labels: D.days,
-    datasets: [
-      { type: "bar", label: "New episodes", data: D.daily, backgroundColor: css("--c-main") },
-      { type: "line", label: "Unusual day", data: D.anomalies, showLine: false, pointRadius: 6,
-        pointBackgroundColor: css("--c-critical"), borderColor: css("--c-critical") },
-    ],
-  },
-  options: { scales: { x: { ticks: { maxTicksLimit: 12 } }, y: { beginAtZero: true } } },
-  plugins: [changePointLines],
-});
-
-new Chart(document.getElementById("severity"), {
-  type: "bar",
-  data: {
-    labels: D.severity.weeks,
-    datasets: ["critical", "high", "medium", "low"].map((s) => ({
-      label: s, data: D.severity.series[s], backgroundColor: css("--c-" + s),
-    })),
-  },
-  options: { scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } },
-});
-
-new Chart(document.getElementById("overrule"), {
-  type: "line",
-  data: {
-    labels: D.overrule.weeks,
-    datasets: [
-      { label: "Overruled %", data: D.overrule.rates, borderColor: css("--c-main"), tension: 0.2 },
-      { label: "Alert threshold", data: D.overrule.weeks.map(() => D.overrule.threshold),
-        borderColor: css("--c-critical"), borderDash: [6, 4], pointRadius: 0 },
-    ],
-  },
-  options: { scales: { y: { beginAtZero: true, max: 100 } } },
-});
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>DriftPilot — driftpilot-demo/infra</title>
+    <script defer src="./assets/index-8OAQgZtZ.js"></script>
+    <link rel="stylesheet" href="./assets/style-_yKXNOJW.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>The DriftPilot dashboard needs JavaScript.</noscript>
+    <script id="embedded-data" type="application/json">{"schema": 1, "title": "DriftPilot \u2014 driftpilot-demo/infra", "note": null, "generated": "2026-11-25T11:03:17Z", "asOf": "2026-11-25T11:03:01Z", "periodStart": "2026-10-24T23:40:19Z", "periodEnd": "2026-11-25T11:03:01Z", "publishAddresses": true, "episodes": [{"id": "7d450d6e3608", "address": "github_branch_protection.api_main", "attribute": "required_pull_request_reviews[0].required_approving_review_count", "resourceType": "github_branch_protection", "start": "2026-10-25T06:55:13Z", "end": "2026-10-25T06:55:13Z", "resolvedAt": "2026-10-25T06:56:33Z", "runsSeen": 1, "severity": "critical", "category": "security", "action": "revert", "decidedBy": "rule", "outcome": "accepted", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "Required pull request approvals were lowered, so changes can merge with less review.", "controls": [], "guardrails": [], "confidence": 0.95, "ruleId": "github-required-approvals-reduced", "promptVersion": null, "prUrl": null, "issueUrl": "https://github.com/driftpilot-demo/infra/issues/3", "before": "2", "after": "0", "fix": "# Review the plan first, then apply it yourself. DriftPilot never runs apply.\nterraform plan -target=github_branch_protection.api_main\nterraform apply -target=github_branch_protection.api_main"}, {"id": "d384ab09fdd2", "address": "github_repository.api", "attribute": "has_issues", "resourceType": "github_repository", "start": "2026-10-25T21:51:20Z", "end": "2026-10-26T04:54:20Z", "resolvedAt": "2026-10-26T07:37:55Z", "runsSeen": 2, "severity": "medium", "category": "availability", "action": "revert", "decidedBy": "llm", "outcome": "accepted", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "The issue tracker for the repository was disabled, which prevents users and team members from reporting bugs or tracking tasks.", "controls": [], "guardrails": [], "confidence": 0.9, "ruleId": null, "promptVersion": "triage-v2", "prUrl": null, "issueUrl": "https://github.com/driftpilot-demo/infra/issues/4", "before": "true", "after": "false", "fix": "# Review the plan first, then apply it yourself. DriftPilot never runs apply.\nterraform plan -target=github_repository.api\nterraform apply -target=github_repository.api"}, {"id": "7d450d6e3608", "address": "github_branch_protection.api_main", "attribute": "required_pull_request_reviews[0].required_approving_review_count", "resourceType": "github_branch_protection", "start": "2026-10-26T07:49:49Z", "end": "2026-10-26T08:06:58Z", "resolvedAt": "2026-10-26T08:11:47Z", "runsSeen": 2, "severity": "critical", "category": "security", "action": "revert", "decidedBy": "rule", "outcome": "accepted", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "Required pull request approvals were lowered, so changes can merge with less review.", "controls": [], "guardrails": [], "confidence": 0.95, "ruleId": "github-required-approvals-reduced", "promptVersion": null, "prUrl": null, "issueUrl": "https://github.com/driftpilot-demo/infra/issues/5", "before": "2", "after": "0", "fix": "# Review the plan first, then apply it yourself. DriftPilot never runs apply.\nterraform plan -target=github_branch_protection.api_main\nterraform apply -target=github_branch_protection.api_main"}, {"id": "63582fdbe618", "address": "github_branch_protection.api_main", "attribute": "required_status_checks", "resourceType": "github_branch_protection", "start": "2026-10-26T08:06:58Z", "end": "2026-10-26T08:06:58Z", "resolvedAt": "2026-10-26T08:11:47Z", "runsSeen": 1, "severity": "medium", "category": "security", "action": "codify", "decidedBy": "llm", "outcome": "accepted", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "A required status check was added to the branch protection, which improves code quality and security by ensuring tests pass before merging.", "controls": [], "guardrails": [], "confidence": 0.9, "ruleId": null, "promptVersion": "triage-v2", "prUrl": null, "issueUrl": "https://github.com/driftpilot-demo/infra/issues/5", "before": "[]", "after": "[{\"contexts\": [], \"strict\": true}]", "fix": null}, {"id": "63582fdbe618", "address": "github_branch_protection.api_main", "attribute": "required_status_checks", "resourceType": "github_branch_protection", "start": "2026-10-26T08:12:38Z", "end": "2026-11-23T07:46:09Z", "resolvedAt": "2026-11-23T20:54:05Z", "runsSeen": 70, "severity": "medium", "category": "availability", "action": "codify", "decidedBy": "llm", "outcome": "pending", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "A required status check was added to the branch protection, which improves code quality and stability by ensuring tests pass before merging.", "controls": [], "guardrails": [], "confidence": 0.9, "ruleId": null, "promptVersion": "triage-v2", "prUrl": "https://github.com/driftpilot-demo/infra/pull/6", "issueUrl": null, "before": "[]", "after": "[{\"contexts\": [], \"strict\": true}]", "fix": null}, {"id": "7d450d6e3608", "address": "github_branch_protection.api_main", "attribute": "required_pull_request_reviews[0].required_approving_review_count", "resourceType": "github_branch_protection", "start": "2026-10-26T09:06:53Z", "end": "2026-11-23T07:46:09Z", "resolvedAt": "2026-11-23T20:54:05Z", "runsSeen": 68, "severity": "critical", "category": "security", "action": "revert", "decidedBy": "rule", "outcome": "accepted", "resolved": true, "team": "unowned", "repo": "unknown", "environment": "unknown", "account": "unknown", "driftType": "infrastructure", "reason": "Required pull request approvals were lowered, so changes can merge with less review.", "controls": [], "guardrails": [], "confidence": 0.95, "ruleId": "github-required-approvals-reduced", "promptVersion": null, "prUrl": null, "issueUrl": "https://github.com/driftpilot-demo/infra/issues/7", "before": "2", "after": "0", "fix": "# Review the plan first, then apply it yourself. DriftPilot never runs apply.\nterraform plan -target=github_branch_protection.api_main\nterraform apply -target=github_branch_protection.api_main"}], "runs": [{"t": "2026-10-24T23:40:19Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-25T21:51:20Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-26T22:43:53Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-27T22:19:30Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-28T22:39:08Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-29T22:49:09Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-30T22:25:47Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-10-31T21:40:36Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-01T22:07:02Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-02T16:16:06Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-03T23:27:26Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-04T19:50:07Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-05T20:00:52Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-06T19:28:22Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-07T21:55:50Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-08T22:12:07Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-09T22:26:19Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-10T19:48:44Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-11T19:39:48Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-12T19:59:46Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-13T19:47:10Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-14T22:29:59Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-15T18:54:55Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-16T22:11:48Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-17T20:59:34Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-18T20:37:32Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-19T20:43:09Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-20T20:27:27Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-21T19:21:51Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-22T19:45:36Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-23T23:58:04Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-24T22:30:49Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-25T08:43:36Z", "repo": "unknown", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {}, "unmanagedByTeam": {}}, {"t": "2026-11-25T11:03:01Z", "repo": "driftpilot-demo/infra", "environment": "unknown", "driftType": "infrastructure", "dir": "infra", "managed": 6, "unmanaged": 0, "managedByTeam": {"unowned": 6}, "unmanagedByTeam": {}}], "kpis": {"episodes": 6, "managed": 12, "unmanaged": 0, "driftedResources": 2, "iacCoverage": 100.0, "driftRate": 16.7, "openCount": 0, "oldestOpenHours": null, "mttrHours": 229.8, "decided": 5, "overruleRate": 0.0, "alertPrecision": 100.0, "recurringOffenders": 1}, "analytics": {"days": ["2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14", "2026-11-15", "2026-11-16", "2026-11-17", "2026-11-18", "2026-11-19", "2026-11-20", "2026-11-21", "2026-11-22", "2026-11-23", "2026-11-24", "2026-11-25"], "daily": [0, 2, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "anomalies": [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "changePoints": [], "recurring": [], "dayAnomalies": [], "shifts": [], "health": {"runs": 94, "pct_runs_zero_drift": 20.2, "mean_hours_to_remediate": 224.9, "pct_resources_ever_drifted": 33.3}}, "links": {"repo": null, "workflow": "driftpilot.yml", "branch": "main"}, "guardrails": {"llmCallLimit": 60, "hasAudit": false, "runs": []}, "monitor": {"alerts": [], "overruleThreshold": 25, "recentOverruleRate": null, "baselineOverruleRate": 0.0}}</script>
+  </body>
 </html>
