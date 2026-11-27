@@ -22,7 +22,7 @@ driftpilot_mean_time_to_resolve_hours 106.2
 driftpilot_overrule_ratio 0
 # HELP driftpilot_scan_last_timestamp_seconds Unix time of the latest recorded scan.
 # TYPE driftpilot_scan_last_timestamp_seconds gauge
-driftpilot_scan_last_timestamp_seconds{repo="driftpilot-demo/infra",drift_type="infrastructure"} 1795767944
+driftpilot_scan_last_timestamp_seconds{repo="driftpilot-demo/infra",drift_type="infrastructure"} 1795814131
 driftpilot_scan_last_timestamp_seconds{repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector",drift_type="database"} 1795605422
 driftpilot_scan_last_timestamp_seconds{repo="shreytiwari09/DriftPilot-AI-Terraform-Drift-Detector",drift_type="infrastructure"} 1795602128
 # HELP driftpilot_scan_errors_7d Errors reported by scans in the 7 days before the latest scan.
